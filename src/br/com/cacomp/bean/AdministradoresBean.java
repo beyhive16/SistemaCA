@@ -24,6 +24,16 @@ public class AdministradoresBean {
 	
 	private List<Administradores> itens;
 	
+	private List<Administradores> itensFiltrados;
+	
+	public List<Administradores> getItensFiltrados() {
+		return itensFiltrados;
+	}
+
+	public void setItensFiltrados(List<Administradores> itensFiltrados) {
+		this.itensFiltrados = itensFiltrados;
+	}
+
 	public Administradores getAdms() {
 		return adms;
 	}
@@ -44,9 +54,8 @@ public class AdministradoresBean {
 	public void prepararPesquisa(){
 		try {
 			AdministradoresDAO admDAO = new AdministradoresDAO();
-			ArrayList<Administradores> lista = admDAO.listar();
-			itens = lista;
-			System.out.println("Tam: " + itens.size());
+			itens = admDAO.listar();
+			
 		} catch (SQLException e) {
 			Mensagens.addMsgErro("ex.getMessage()");
 			e.printStackTrace();
@@ -62,8 +71,8 @@ public class AdministradoresBean {
 			AdministradoresDAO admDAO = new AdministradoresDAO();
 			admDAO.salvar(adms);
 			
-			ArrayList<Administradores> lista = admDAO.listar();
-			itens = lista;
+			itens = admDAO.listar();
+			
 			Mensagens.addMsgSucesso("Salvo com sucesso!");
 		} catch (SQLException e) {
 			Mensagens.addMsgErro("ex.getMessage()");
@@ -71,19 +80,31 @@ public class AdministradoresBean {
 		}
 	}
 	
-	/*public void prepararExcluir(){
-		adms = itens.getRowData();
-	}*/
-	
 	public void excluir(Administradores admTEMP){
 		try {
 			System.out.println("codigo: "+admTEMP.getCodigo()+" nome: "+admTEMP.getNome());
 			AdministradoresDAO admDAO = new AdministradoresDAO();
 			admDAO.excluir(admTEMP);
 			
-			ArrayList<Administradores> lista = admDAO.listar();
-			itens = lista;
+			itens = admDAO.listar();
 			Mensagens.addMsgSucesso("Excluido com sucesso!");
+		} catch (SQLException e) {
+			Mensagens.addMsgErro("ex.getMessage()");
+			e.printStackTrace();
+		}
+	}
+	
+	public void preparaEditar(Administradores admTEMP){
+		adms = admTEMP;
+	}
+	public void editar(){
+		try {
+			AdministradoresDAO admDAO = new AdministradoresDAO();
+			admDAO.editar(adms);
+			
+			itens = admDAO.listar();
+			
+			Mensagens.addMsgSucesso("Editado com sucesso!");
 		} catch (SQLException e) {
 			Mensagens.addMsgErro("ex.getMessage()");
 			e.printStackTrace();
